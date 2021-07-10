@@ -8,8 +8,17 @@ RUN apt update && apt upgrade -y
 RUN apt install -y build-essential cmake gfortran git flex bison \
 	wget curl python python-sip-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev hdf5-tools linux-headers-generic \
 	libhdf5-dev netcdf-bin cdftools libnetcdf-dev cmake libopenblas-dev libblas-dev libboost-all-dev
-RUN apt install -y git-lfs vim-scripts
+RUN apt install -y git-lfs vim-scripts build-essential libssl-dev
 
+WORKDIR /
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.2/cmake-3.20.2.tar.gz
+RUN tar -zxvf cmake-3.20.2.tar.gz
+WORKDIR cmake-3.20.2
+RUN ./bootstrap
+RUN make -j
+RUN make install 
+
+WORKDIR /
 RUN git clone https://github.com/tribitspub/tribits
 RUN mkdir tribits/build
 WORKDIR tribits/build
